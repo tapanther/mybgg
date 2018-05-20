@@ -8,6 +8,8 @@ jobs:
       - checkout # special step to check out source code to the working directory
       - run:
           command: |
+            git config user.email "mybgg@circleci"
+            git config user.name "CircleCI"
             git remote add upstream https://github.com/EmilStenstrom/mybgg
             git fetch upstream
             git rebase upstream/master
