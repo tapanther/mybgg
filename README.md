@@ -106,7 +106,7 @@ GitHub Pages_. Select your master branch as Source, and click Save.
 1. **Add a connection between your forked project**, and the mybgg project. We will use this "connection", or remote, to fetch the latest version. _You only need to do this the first time_.
 
    ```
-   git remote add upstream https://github.com/YOUR_GITHUB_USERNAME/mybgg.git
+   git remote add upstream https://github.com/EmilStenstrom/mybgg.git
    ```
 
 2. **Fetch the latest changes** from the mybgg project:
@@ -121,7 +121,14 @@ GitHub Pages_. Select your master branch as Source, and click Save.
    git merge upstream/master
    ```
 
-4. **Push the new updated version** to GitHub:
+4. **Update to the latest version of all external libraries** that mybgg uses internally. They can update between versions.
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+
+5. **Push the new updated version** to GitHub:
 
    ```
    git push
@@ -130,5 +137,5 @@ GitHub Pages_. Select your master branch as Source, and click Save.
 ## Projects used under the hood
 
 * Meeple icon (CC4 Attribtion): https://icon-icons.com/icon/meeple/38522#256
-* Python library for BGG (BSD-3): https://github.com/lcosmin/boardgamegeek
 * Algolia search client (MIT): https://github.com/algolia/algoliasearch-client-python
+* Mobile testing with: <a href="https://www.browserstack.com"><img src="https://raw.githubusercontent.com/EmilStenstrom/mybgg/master/Browserstack-logo@2x.png" height="25" alt="Browserstack" style="vertical-align: top"></a>
