@@ -56,7 +56,7 @@ class BGGClient:
             raise BGGException("BGG API closed the connection prematurely, please try again...")
 
         logger.debug("REQUEST: " + response.url)
-        logger.debug("RESPONSE: \n" + "\n".join(prettify_if_xml(response.text).splitlines()[:25]))
+        logger.debug("RESPONSE: \n" + prettify_if_xml(response.text))
 
         if response.status_code != 200:
 
@@ -116,11 +116,10 @@ class BGGClient:
     def _games_list_to_games(self, data):
         def numplayers_to_result(_, results):
             result = {result["value"].lower().replace(" ", "_"): int(result["numvotes"]) for result in results}
+            if not result:
+                result = {'best': 0, 'recommended': 0, 'not_recommended': 0}
 
-            try:
-                is_recommended = result['best'] + result['recommended'] > result['not_recommended']
-            except KeyError:
-                is_recommended = False
+            is_recommended = result['best'] + result['recommended'] > result['not_recommended']
             if not is_recommended:
                 return "not_recommended"
 
@@ -143,6 +142,10 @@ class BGGClient:
                 (players["numplayers"], players["result"])
                 for players in numplayers
             ]
+
+        def log_item(_, item):
+            logger.debug("Successfully parsed: {} (id: {}).".format(item["name"], item["id"]))
+            return item
 
         game_processor = xml.dictionary("items", [
             xml.array(
@@ -208,8 +211,11 @@ class BGGClient:
                         alias="rating"
                     ),
                     xml.string("playingtime", attribute="value", alias="playing_time"),
-                ], required=False, alias="items")
-            )
+                ],
+                required=False,
+                alias="items",
+                hooks=xml.Hooks(after_parse=log_item),
+            ))
         ])
         games = xml.parse_from_string(game_processor, data)
         games = games["items"]
