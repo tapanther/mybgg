@@ -46,9 +46,13 @@ Using this project, you can set up your own site for searching and filtering you
                                         // page which says: APPS > YOUR_ID_HERE
               "api_key_search_only": "YOUR_PUBLIC_API_KEY",  // Click "API Keys" in the menu to the left.
                                                              // Use the "Search-Only API Key"!
-              "index_name": "YOUR_INDEX_NAME"  // All your games will be stored in something called an "index".
-                                               // You can create and index by going to "Indices" in the menu to the left.
-                                               // Click to create a new index, and give it a name. Put the name you choose here.
+              "index_name": "YOUR_INDEX_NAME",  // All your games will be stored in something called an "index".
+                                                // You can create and index by going to "Indices" in the menu to the left.
+                                                // Click to create a new index, and give it a name. Put the name you choose here.
+              "hits_per_page": 48,  // Number of games you want to show on each page
+              "sort_by": "asc(name)"  // Default sort order before the user has searched for anything.
+                                      // Can be one of: asc(rank), desc(rating), desc(numrated), desc(numowned)
+                                      // "asc" stands for ascending, meaning lowest number first, desc the opposite
           }
       }
       ```
@@ -62,7 +66,7 @@ Using this project, you can set up your own site for searching and filtering you
    </details>
 
 3. **Install the python libraries needed** by running:
-   ```pip install -r requirements.txt```
+   ```pip install -r scripts/requirements.txt```
 
    <details>
       <summary>Details</summary>
@@ -73,7 +77,7 @@ Using this project, you can set up your own site for searching and filtering you
    </details>
 
 4. **Download your games from boardgamegeek and send them to algolia**:
-   ```python download_and_index.py --apikey YOUR_ALGOLIA_ADMIN_API_KEY```
+   ```python scripts/download_and_index.py --apikey YOUR_ALGOLIA_ADMIN_API_KEY```
 
    (_Note that this API KEY is NOT the same as the one you put in config.json. Never share your admin api key publicly_)
 
@@ -124,7 +128,7 @@ GitHub Pages_. Select your master branch as Source, and click Save.
 4. **Update to the latest version of all external libraries** that mybgg uses internally. They can update between versions.
 
    ```
-   pip install -r requirements.txt
+   pip install -r scripts/requirements.txt
    ```
 
 

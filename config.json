@@ -13,5 +13,6 @@
         "app_id": "QQGMN1TC95",
         "api_key_search_only": "ec977891d96755a8e02c3114f9ffd90a",
         "index_name": "BoardGames"
+        "hits_per_page": 24
     }
 }
