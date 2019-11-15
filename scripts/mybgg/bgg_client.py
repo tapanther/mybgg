@@ -206,6 +206,7 @@ class BGGClient:
                         xml.string(
                             "statistics/ratings/ranks/rank[@friendlyname='Board Game Rank']",
                             attribute="value",
+                            required=False,
                             alias="rank"
                         ),
                         xml.string(
