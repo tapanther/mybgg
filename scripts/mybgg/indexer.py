@@ -10,7 +10,8 @@ from PIL import Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 class Indexer:
-    def __init__(self, app_id, apikey, index_name, hits_per_page, sort_by):
+
+    def __init__(self, app_id, apikey, index_name, hits_per_page):
         client = SearchClient.create(
             app_id=app_id,
             api_key=apikey,
@@ -28,14 +29,37 @@ class Indexer:
                 'players',
                 'weight',
                 'playing_time',
+                'searchable(previous_players)',
+                'numplays',
             ],
-            'customRanking': [sort_by],
+            'customRanking': ['asc(name)'],
             'highlightPreTag': '<strong class="highlight">',
             'highlightPostTag': '</strong>',
             'hitsPerPage': hits_per_page,
         })
 
+        self._init_replicas(client, index)
+
         self.index = index
+
+    def _init_replicas(self, client, mainIndex):
+
+        mainIndex.set_settings({
+            'replicas': [
+                mainIndex.name + '_rank_ascending',
+                mainIndex.name + '_numrated_descending',
+                mainIndex.name + '_numowned_descending',
+            ]
+        })
+
+        replica_index = client.init_index(mainIndex.name + '_rank_ascending')
+        replica_index.set_settings({'ranking': ['asc(rank)']})
+
+        replica_index = client.init_index(mainIndex.name + '_numrated_descending')
+        replica_index.set_settings({'ranking': ['desc(usersrated)']})
+
+        replica_index = client.init_index(mainIndex.name + '_numowned_descending')
+        replica_index.set_settings({'ranking': ['desc(numowned)']})
 
     @staticmethod
     def todict(obj):
